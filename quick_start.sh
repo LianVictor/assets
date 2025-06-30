@@ -31,4 +31,12 @@ if [ -d VectorBlox-SDK-release-v$VER ]; then
 		fi
 		bash setup_camera.sh
 	fi
+	
+	if [ ! -f run-video-model ];then
+		make
+	fi
+	
+	if [ -f run-video-model ];then
+		./run-video-model
+	fi
 fi
