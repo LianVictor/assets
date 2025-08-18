@@ -19,7 +19,9 @@ if [ ! -d VectorBlox-SDK-release-v$VER ]; then
 	if [ ! -f release-v$VER.zip ]; then
 		wget --no-check-certificate https://github.com/Microchip-Vectorblox/VectorBlox-SDK/archive/refs/tags/release-v$VER.zip ~
 	fi
-
+	if [ -f VectorBlox-SDK-release-v$VER.zip ]; then
+		mv VectorBlox-SDK-release-v$VER.zip release-v$VER.zip
+	fi
 	unzip release-v$VER.zip -d ~
 	
 	cd VectorBlox-SDK-release-v$VER/example/soc-video-c
