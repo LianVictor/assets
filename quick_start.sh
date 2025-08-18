@@ -1,4 +1,4 @@
-VER="${1:-2.0.2}"
+VER="${1:-2.0.3}"
 YOCTO=5.15.92-linux4microchip+fpga-2023.02.1
 
 if [[ $(uname -r) != $YOCTO ]]; then
@@ -9,15 +9,22 @@ if [[ $(uname -r) != $YOCTO ]]; then
 fi
 
 if [ ! -d samples_V1000_$VER ]; then
-	wget --no-check-certificate https://github.com/Microchip-Vectorblox/VectorBlox-SoC-Video-Kit-Demo/releases/download/release-v$VER/samples_V1000_$VER.zip ~
-
+	if [ ! -f samples_V1000_$VER.zip ]; then
+		wget --no-check-certificate https://github.com/Microchip-Vectorblox/VectorBlox-SoC-Video-Kit-Demo/releases/download/release-v$VER/samples_V1000_$VER.zip ~
+	fi
 	unzip samples_V1000_$VER.zip -d ~
 fi
 
 if [ ! -d VectorBlox-SDK-release-v$VER ]; then
-	wget --no-check-certificate https://github.com/Microchip-Vectorblox/VectorBlox-SDK/archive/refs/tags/release-v$VER.zip ~
+	if [ ! -f release-v$VER.zip ]; then
+		wget --no-check-certificate https://github.com/Microchip-Vectorblox/VectorBlox-SDK/archive/refs/tags/release-v$VER.zip ~
+	fi
 
 	unzip release-v$VER.zip -d ~
+	
+	cd VectorBlox-SDK-release-v$VER/example/soc-video-c
+	bash setup_camera.sh
+	cd -
 fi
 
 #Setup camera if not found
@@ -33,6 +40,7 @@ if [ -d VectorBlox-SDK-release-v$VER ]; then
 	fi
 	
 	if [ ! -f run-video-model ];then
+		make overlay
 		make
 	fi
 	
